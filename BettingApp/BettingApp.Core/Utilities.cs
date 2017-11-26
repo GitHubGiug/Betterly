@@ -58,112 +58,134 @@ namespace BettingApp.BettingApp.Core
 
         internal static List<Bet> CurrencyConversion(List<Bet> reportResult, string currencyValue)
         {
-            if (currencyValue == "EUR")
-            {
-
-                foreach (Bet result in reportResult)
-                {
-
-                    if (result.Currency != "EUR")
-                    {                        result.Price = result.Price/ Model.Currency.Rate;
-                        result.Currency = "EUR";
-                    }
-
-                }
+            if (reportResult == null)
                 return reportResult;
-            }
-            else if (currencyValue == "GBP")
+
+
+            try
             {
-                foreach (Bet result in reportResult)
+                if (currencyValue == "EUR")
                 {
 
-                    if (result.Currency != "GBP")
+                    foreach (Bet result in reportResult)
                     {
-                        result.Price = result.Price * Model.Currency.Rate;
-                        result.Currency = "GBP";
-                    }
-                }
-                return reportResult;
 
+                        if (result.Currency != "EUR")
+                        {
+                            result.Price = result.Price / Model.Currency.Rate;
+                            result.Currency = "EUR";
+                        }
+
+                    }
+                    return reportResult;
+                }
+                else if (currencyValue == "GBP")
+                {
+                    foreach (Bet result in reportResult)
+                    {
+
+                        if (result.Currency != "GBP")
+                        {
+                            result.Price = result.Price * Model.Currency.Rate;
+                            result.Currency = "GBP";
+                        }
+                    }
+                    return reportResult;
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
             return reportResult;
-        
-    }
 
-    public static string Currency(string a)
-    {
-        if (a == "EUR")
-            return "€";
-        else
-            return "£";
-    }
-
-
-    internal static IEnumerable<ReportData> GroupReport(IEnumerable<Bet> betList)
-    {
-        var propertyInfo = typeof(Bet).GetProperty("SelectionId");
-
-        var d = (from bet in betList
-
-                 group bet by new { bet.SelectionName ,bet.Currency}
-                    into grouping
-                 select new ReportData
-                 {
-                     FirstElement = grouping.FirstOrDefault(),
-                     NoOfBets = grouping.Count(),
-                     TotalStake = grouping.Sum(p => p.Stake),
-                     TotalPayout = grouping.Sum(p => p.Stake) * grouping.Sum(p => p.Price),
-                 });
-        return d;
-    }
-
-    public static IOrderedEnumerable<ReportData> SortReport(IEnumerable<ReportData> betList, string OrderByValue)
-    {
-        var propertyInfo = typeof(ReportData).GetProperty(OrderByValue);
-        var d = betList
-                     .OrderByDescending(x => propertyInfo.GetValue(x, null));
-        return d;
-    }
-
-    internal static void Output(string outputMethod, IOrderedEnumerable<ReportData> sortedReportResult)
-    {
-        if (outputMethod == "XML")
-            Utilities.ReportToXml(sortedReportResult);
-        else if (outputMethod == "Console")
-            Utilities.ReportToConsole(sortedReportResult);
-        else Console.WriteLine("Invalid Output Method refenced in App.Config file");
-
-    }
-
-
-    public static void ReportToConsole(IOrderedEnumerable<ReportData> result)
-    {
-        Console.WriteLine("Selection Name |Currency |No Of Bets |Total Stakes     |Total Payout  ");
-
-        foreach (ReportData item in result)
-        {
-            Console.WriteLine("{0}    |  {1}    | {2}         | {3}{4}         | {3} {5}",
-                item.FirstElement.SelectionName,
-                item.FirstElement.Currency,
-                item.NoOfBets,
-                Currency(item.FirstElement.Currency),
-                item.TotalStake,
-                item.TotalPayout);
         }
 
-    }
-
-    internal static void ReportToXml(IOrderedEnumerable<ReportData> reportResult)
-    {
-        DataContractSerializer s = new DataContractSerializer(typeof(List<ReportData>));
-        using (FileStream fs = File.Open("test" + typeof(List<ReportData>).Name + ".xml", FileMode.Create))
+        public static string Currency(string a)
         {
-            Console.WriteLine("Testing for type: {0}", typeof(List<ReportData>));
-            s.WriteObject(fs, reportResult);
+            if (a == "EUR")
+                return "E";
+            else if (a == "GBP")
+                return "£";
+            else
+                return "?";
+
+        }
+
+
+        internal static IEnumerable<ReportData> GroupReport(IEnumerable<Bet> betList)
+        {
+            var propertyInfo = typeof(Bet).GetProperty("SelectionId");
+
+            var groupedReport = (from bet in betList
+
+                                 group bet by new { bet.SelectionName, bet.Currency }
+
+                        into grouping
+
+                                 select new ReportData
+                                 {
+                                     SelectionId = grouping.FirstOrDefault().SelectionName,
+                                     Currency = grouping.FirstOrDefault().Currency,
+                                     NoOfBets = grouping.Count(),
+                                     TotalStake = grouping.Sum(p => p.Stake),
+                                     TotalPayout = grouping.Sum(p => p.Stake) * grouping.Sum(p => p.Price),
+                                 });
+            return groupedReport;
+        }
+
+        public static IOrderedEnumerable<ReportData> SortReport(IEnumerable<ReportData> groupedReport, string OrderByValue)
+        {
+            var propertyInfo = typeof(ReportData).GetProperty(OrderByValue);
+            var sortedReport = groupedReport
+                         .OrderByDescending(x => propertyInfo.GetValue(x, null));
+            return sortedReport;
+        }
+
+        internal static void Output(string outputMethod, IOrderedEnumerable<ReportData> sortedReportResult)
+        {
+            if (outputMethod == "XML")
+                ReportToXml(sortedReportResult);
+            else if (outputMethod == "Console")
+                ReportToConsole(sortedReportResult);
+            else Console.WriteLine("Invalid Output Method refenced in App.Config file");
+
+        }
+
+
+        public static void ReportToConsole(IOrderedEnumerable<ReportData> result)
+        {
+            Console.WriteLine("Selection Name |Currency |No Of Bets |Total Stakes     |Total Payout  ");
+
+            foreach (ReportData item in result)
+            {
+                Console.WriteLine("{0}    |  {1}    | {2}         | {3} {4}         | {3} {5}",
+                    item.SelectionId,
+                    item.Currency,
+                    item.NoOfBets,
+                    Currency(item.Currency),
+                    item.TotalStake,
+                    item.TotalPayout);
+            }
+
+        }
+
+        internal static void ReportToXml(IOrderedEnumerable<ReportData> reportResult)
+        {
+
+            List<ReportData> y = reportResult.Cast<ReportData>().ToList();
+
+            DataContractSerializer s = new DataContractSerializer(typeof(List<ReportData>));
+            using (FileStream fs = File.Open("myTest" + typeof(List<ReportData>).Name + ".xml", FileMode.Create))
+            {
+                Console.WriteLine("Testing for type: {0}", typeof(List<ReportData>));
+                s.WriteObject(fs, y);
+            }
         }
     }
-}
 }
 
 

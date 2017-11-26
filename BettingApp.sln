@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\..\Desktop\Bet_Data.csv = ..\..\..\Desktop\Bet_Data.csv
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BettingApp.Tests", "BettingApp.Tests\BettingApp.Tests.csproj", "{E6280DF4-AF3F-4BAA-A241-335EAA52864D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{266B310C-7571-408D-98D6-B855F0923E61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{266B310C-7571-408D-98D6-B855F0923E61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{266B310C-7571-408D-98D6-B855F0923E61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6280DF4-AF3F-4BAA-A241-335EAA52864D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6280DF4-AF3F-4BAA-A241-335EAA52864D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6280DF4-AF3F-4BAA-A241-335EAA52864D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6280DF4-AF3F-4BAA-A241-335EAA52864D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -14,17 +14,16 @@ namespace BettingApp
 
             var betList = Utilities.ReadCSV(stats);
 
-
             string currencyValue = ConfigurationManager.AppSettings["CurrencyOutput"];
             betList = Utilities.CurrencyConversion(betList, currencyValue);
 
-            var reportResult = Utilities.GroupReport(betList);
+            var groupReportResult = Utilities.GroupReport(betList);
 
 
 
 
             string OrderByValue = ConfigurationManager.AppSettings["OrderBy"];
-            var sortedReportResult = Utilities.SortReport(reportResult,OrderByValue);
+            var sortedReportResult = Utilities.SortReport(groupReportResult, OrderByValue);
 
 
 
@@ -37,20 +36,6 @@ namespace BettingApp
             Console.ReadKey();
         }
 
-        async static void GetRequest()
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                using (HttpResponseMessage response = await client.GetAsync("http://www.google.com.pk"))
-                {
-                    using (HttpContent content = response.Content)
-                    {
-                        string mycontent = await content.ReadAsStringAsync();
-                        Console.WriteLine(mycontent);
-                    }
-                }
-            }
-        }
     }
 
 
