@@ -12,6 +12,7 @@ o	Exchange rate
 
 
 
+
 Set-Up
 
 Please update the connection string to a folder on your local machine that contains 'Bet_Data.csv'
