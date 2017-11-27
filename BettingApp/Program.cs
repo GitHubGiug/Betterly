@@ -8,31 +8,36 @@ namespace BettingApp
 {
     class Program
     {
+
+
+
         static void Main(string[] args)
         {
             List<Bet> stats = new List<Bet>();
 
+            string currencyValue = ConfigurationManager.AppSettings["CurrencyOutput"];
+            string OrderByValue = ConfigurationManager.AppSettings["OrderBy"];
+            string OutputMethod = ConfigurationManager.AppSettings["OutputMethod"];
+
+
+            //Import Data
             var betList = Import.ReadCSV(stats);
 
+            //Calculate Payout
             betList = Utilities.CalculateListPayout(betList);
 
 
-
-            string currencyValue = ConfigurationManager.AppSettings["CurrencyOutput"];
+            //Convert Currency if required 
             betList = Utilities.CurrencyConversion(betList, currencyValue);
 
+            //Group list of bets
             var groupReportResult = Utilities.GroupReport(betList);
 
 
-
-
-            string OrderByValue = ConfigurationManager.AppSettings["OrderBy"];
+            //Sort list of bets
             var sortedReportResult = Utilities.SortReport(groupReportResult, OrderByValue);
 
-
-
-
-            string OutputMethod = ConfigurationManager.AppSettings["OutputMethod"];
+            //Display List as per congif in App.config
             Export.Output(OutputMethod, sortedReportResult);
 
 
