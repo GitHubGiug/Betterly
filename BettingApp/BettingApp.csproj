@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BettingApp.Core\Export.cs" />
+    <Compile Include="BettingApp.Core\Import.cs" />
     <Compile Include="BettingApp.Core\Utilities.cs" />
     <Compile Include="BettingApp.Model\Bet.cs" />
     <Compile Include="BettingApp.Model\Currency.cs" />

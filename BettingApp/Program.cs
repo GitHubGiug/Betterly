@@ -12,7 +12,11 @@ namespace BettingApp
         {
             List<Bet> stats = new List<Bet>();
 
-            var betList = Utilities.ReadCSV(stats);
+            var betList = Import.ReadCSV(stats);
+
+            betList = Utilities.CalculateListPayout(betList);
+
+
 
             string currencyValue = ConfigurationManager.AppSettings["CurrencyOutput"];
             betList = Utilities.CurrencyConversion(betList, currencyValue);
@@ -29,11 +33,11 @@ namespace BettingApp
 
 
             string OutputMethod = ConfigurationManager.AppSettings["OutputMethod"];
-            Utilities.Output(OutputMethod, sortedReportResult);
+            Export.Output(OutputMethod, sortedReportResult);
 
 
 
-            Console.ReadKey();
+            Console.ReadLine();
         }
 
     }
