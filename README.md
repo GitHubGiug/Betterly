@@ -10,6 +10,8 @@ o	The sorting and grouping strategy
 
 o	Exchange rate
 
-- Set-Up
 
-Please update the connection string to a folder on your local machine that contains'Bet_Data.csv'
+
+Set-Up
+
+Please update the connection string to a folder on your local machine that contains 'Bet_Data.csv'
